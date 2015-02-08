@@ -12,7 +12,7 @@ RUN ln -s -f /bin/true /usr/bin/chfn
 
 # Versions to use
 ENV libevent_version 2.0.22-stable
-ENV netatalk_version 3.1.7
+ENV netatalk_branch branch-netatalk-3-1
 
 # Install prerequisites:
 RUN apt-get -y install build-essential wget pkg-config checkinstall git avahi-daemon libavahi-client-dev libcrack2-dev libwrap0-dev autotools-dev automake libtool libdb-dev libacl1-dev libdb5.3-dev db-util db5.3-util libgcrypt11 libgcrypt11-dev libtdb-dev
@@ -37,7 +37,7 @@ WORKDIR /usr/local/src
 RUN git clone git://git.code.sf.net/p/netatalk/code netatalk-code
 
 WORKDIR netatalk-code
-RUN git checkout netatalk-${netatalk_version}
+RUN git checkout ${netatalk_branch}
 RUN ./bootstrap
 RUN ./configure \
     --enable-debian \
