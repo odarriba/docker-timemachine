@@ -74,7 +74,7 @@ RUN touch /var/log/afpd.log
 ADD afp.conf /usr/local/etc/afp.conf
 ADD start_services.sh /start_services.sh
 
-EXPOSE 548 636 5353
+EXPOSE 548 636 5353/udp
 
 VOLUME ["/timemachine"]
 
