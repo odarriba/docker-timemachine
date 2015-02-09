@@ -14,6 +14,12 @@ To set up the user to access your backup server do the following:
 * A shell must appear. Type `passwd timemachine` to change the user password.
 * Now you can use the username `timemachine`along with the password you entered.
 
+To save your password for `timemachine` user, you should do a docker commit of the current image and stop/kill and remove the container, and create another using `docker run` with the params above.
+
+## Autostart the service
+
+To start the service when the host starts (the machine running docker, not the container), there is a `timemachine.conf` file that you can copy on `/etc/init/` on Ubuntu-based systems. This allows this container to start on boot time (if the name of the container is `timemachine`).
+
 ## Contributors
 
 * Óscar de Arriba (odarriba@gmail.com)
