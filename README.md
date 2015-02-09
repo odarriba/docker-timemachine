@@ -3,7 +3,7 @@ A docker container to compile the lastest version of Netatalk in order to run a 
 
 ## Installation
 
-To download the docker container and execute it configure your, simply run:
+To download the docker container and execute it, simply run:
 
 `docker run -h timemachine --name timemachine -d -v /srv/timemachine:/timemachine -t -i -p 548:548 -p 636:636 -p 5353:5353/udp odarriba/timemachine`
 
