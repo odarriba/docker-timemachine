@@ -65,9 +65,6 @@ RUN groupadd timemachine \
 	&& mkdir /var/run/dbus \
 	&& chown timemachine:timemachine /timemachine
 
-# Change the hostname
-RUN hostname timemachine
-
 # Create the log file
 RUN touch /var/log/afpd.log
 

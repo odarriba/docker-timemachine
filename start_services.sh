@@ -10,4 +10,4 @@ chown -R timemachine:timemachine /timemachine
 service avahi-daemon start
 netatalk -F /usr/local/etc/afp.conf
 
-tail -f /var/log/afpd.log
+/bin/bash
