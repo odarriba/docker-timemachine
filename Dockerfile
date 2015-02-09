@@ -65,22 +65,17 @@ RUN groupadd timemachine \
 	&& mkdir /var/run/dbus \
 	&& chown timemachine:timemachine /timemachine
 
+# Change the hostname
+RUN hostname timemachine
+
 # Create the log file
 RUN touch /var/log/afpd.log
-
-# Clean the packages
-# RUN apt-get --quiet --yes purge --auto-remove $dev_libraries \
-# 	&& apt-get --quiet --yes autoclean \
-# 	&& apt-get --quiet --yes autoremove \
-# 	&& apt-get --quiet --yes clean
-
-
 
 ADD afp.conf /usr/local/etc/afp.conf
 ADD start_services.sh /start_services.sh
 
-EXPOSE 548 636 5353/udp
+EXPOSE 548 636 5353
 
 VOLUME ["/timemachine"]
 
-CMD [ "/bin/bash" ]
+CMD [ "/bin/bash", "/start_services.sh" ]
