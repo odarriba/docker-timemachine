@@ -14,11 +14,30 @@ To set up the user to access your backup server do the following:
 * A shell must appear. Type `passwd timemachine` to change the user password.
 * Now you can use the username `timemachine`along with the password you entered.
 
-To save your password for `timemachine` user, you should do a docker commit of the current image and stop/kill and remove the container, and create another using `docker run` with the params above.
+To save your password for `timemachine` user, you should do this:
 
-## Autostart the service
+* Get your container ID using `docker ps`
+* Commit the changes using `docker commit [container_id] odarriba/timemachine`
+* Kill the container: `docker kill timemachine`
+* Remove the container `docker rm timemachine`
+* Run the container again using the command above!
 
-To start the service when the host starts (the machine running docker, not the container), there is a `timemachine.conf` file that you can copy on `/etc/init/` on Ubuntu-based systems. This allows this container to start on boot time (if the name of the container is `timemachine`).
+## Auto start the service
+
+This repository contains a script to run the container at boot time **in Ubuntu-based distros**, but it requires that the container have been run manually at least one time.
+
+To install the script, just execute `sudo cp timemachine.conf /etc/init/timemachine.conf`.
+
+* To start the service: `sudo service timemachine start`
+* To stop the service: `sudo service timemachine stop`
+
+**Note:** when you stop the service, the container keeps running. Yo must execute `sudo docker stop timemachine`in order to stop the server.
+
+## Modify netatalk's configuration files
+
+If you want to modify the netatalk's configuration file, called `afp.conf`, you can do it cloning this repo, changing it's contents and building the image by your own using `sudo docker build .`
+
+Also, you can change it by accessing the container and modifying it in live, bute remember to save the chhanges like when the password was changed (see above).
 
 ## Contributors
 

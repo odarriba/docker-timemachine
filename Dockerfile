@@ -16,26 +16,26 @@ ENV netatalk_version 3.1.7
 ENV dev_libraries libavahi-client-dev libcrack2-dev libwrap0-dev autotools-dev libdb-dev libacl1-dev libdb5.3-dev libgcrypt11-dev libtdb-dev libkrb5-dev
 
 # Install prerequisites:
-RUN apt-get --quiet --yes install build-essential wget pkg-config checkinstall git avahi-daemon avahi-utils automake libtool db-util db5.3-util libgcrypt11 ${dev_libraries}
+RUN apt-get --quiet --yes install build-essential nano htop wget pkg-config checkinstall git avahi-daemon avahi-utils automake libtool db-util db5.3-util libgcrypt11 ${dev_libraries}
 
-# Compiling libevent
-WORKDIR /usr/local/src
-RUN wget https://sourceforge.net/projects/levent/files/libevent/libevent-2.0/libevent-${libevent_version}.tar.gz \
-	&& tar xfv libevent-${libevent_version}.tar.gz \
-	&& cd libevent-${libevent_version} \
-	&& ./configure \
-	&& make \
-	&& checkinstall \
-		--pkgname=libevent-${libevent_version} \
-		--pkgversion=${libevent_version} \
-		--backup=no \
-		--deldoc=yes \
-		--default --fstrans=no
+# # Compiling libevent
+# WORKDIR /usr/local/src
+# RUN wget https://sourceforge.net/projects/levent/files/libevent/libevent-2.0/libevent-${libevent_version}.tar.gz \
+# 	&& tar xfv libevent-${libevent_version}.tar.gz \
+# 	&& cd libevent-${libevent_version} \
+# 	&& ./configure \
+# 	&& make \
+# 	&& checkinstall \
+# 		--pkgname=libevent-${libevent_version} \
+# 		--pkgversion=${libevent_version} \
+# 		--backup=no \
+# 		--deldoc=yes \
+# 		--default --fstrans=no
 
 # Compiling netatalk
 WORKDIR /usr/local/src
-RUN wget http://ufpr.dl.sourceforge.net/project/netatalk/netatalk/${netatalk_version}/netatalk-${netatalk_version}.tar.gz \
-	&& tar xfv netatalk-${netatalk_version}.tar.gz \
+RUN wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version}.tar.gz \
+	&& tar xvf netatalk-${netatalk_version}.tar.gz \
 	&& cd netatalk-${netatalk_version} \
 	&& ./configure \
 		--enable-debian \
@@ -48,7 +48,6 @@ RUN wget http://ufpr.dl.sourceforge.net/project/netatalk/netatalk/${netatalk_ver
 		--with-dbus-sysconf-dir=/etc/dbus-1/system.d \
 		--with-init-style=debian-sysv \
 		--with-pam-confdir=/etc/pam.d \
-		--with-tracker-pkgconfig-version=0.16 \
 	&& make \
 	&& checkinstall \
 		--pkgname=netatalk \
@@ -68,7 +67,8 @@ RUN groupadd timemachine \
 # Create the log file
 RUN touch /var/log/afpd.log
 
-ADD afp.conf /usr/local/etc/afp.conf
+ADD config/afp.conf /usr/local/etc/afp.conf
+ADD config/nsswitch.conf /etc/nsswitch.conf
 ADD start_services.sh /start_services.sh
 
 EXPOSE 548 636 5353/udp
