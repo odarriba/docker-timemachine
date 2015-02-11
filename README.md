@@ -5,22 +5,13 @@ A docker container to compile the lastest version of Netatalk in order to run a 
 
 To download the docker container and execute it, simply run:
 
-`docker run -h timemachine --name timemachine -d -v /srv/timemachine:/timemachine -t -i -p 548:548 -p 636:636 -p 5353:5353/udp odarriba/timemachine`
+`sudo docker run -h timemachine --name timemachine -e AFP_LOGIN=<YOUR_USER> -e AFP_PASSWORD=<YOUR_PASS> -e AFP_NAME=<TIME_MACHINE_NAME> -e AFP_SIZE_LIMIT=<MAX_SIZE_IN_MB> -d -v /route/to/your/timemachine:/timemachine -t -i -p 548:548 -p 636:636 odarriba/timemachine`
+
+If you don't want to specify the maximum volume size (and use all the space available), you can omit the `-e AFP_SIZE_LIMIT=<MAX_SIZE_IN_MB>` variable.
 
 Now you have a docker instance running `avahi-daemon` and `netatalk`.
 
-To set up the user to access your backup server do the following:
-* Access your docker instance: `docker attach timemachine`
-* A shell must appear. Type `passwd timemachine` to change the user password.
-* Now you can use the username `timemachine`along with the password you entered.
-
-To save your password for `timemachine` user, you should do this:
-
-* Get your container ID using `docker ps`
-* Commit the changes using `docker commit [container_id] odarriba/timemachine`
-* Kill the container: `docker kill timemachine`
-* Remove the container `docker rm timemachine`
-* Run the container again using the command above!
+**Note about auto-discovering:** due to network restrictions with Docker, avahi-daemon can't spread it's name in your home's LAN. To avoid this, you can try to manually create the AFP's configuration file in an avahi-daemon instance running in your host operating system. *But it is a untested configuration*.
 
 ## Auto start the service
 
@@ -35,9 +26,9 @@ To install the script, just execute `sudo cp timemachine.conf /etc/init/timemach
 
 ## Modify netatalk's configuration files
 
-If you want to modify the netatalk's configuration file, called `afp.conf`, you can do it cloning this repo, changing it's contents and building the image by your own using `sudo docker build .`
+If you want to modify the netatalk's configuration file, called `afp.conf`, you can do it cloning this repo, changing the contentes in `start_services.sh` script and the re-build the image with `sudo docker build .`.
 
-Also, you can change it by accessing the container and modifying it in live, bute remember to save the chhanges like when the password was changed (see above).
+Also, you can change it by accessing the container and modifying it in live, but remember to save the chhanges like when the password was changed (see above).
 
 ## Contributors
 

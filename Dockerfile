@@ -18,20 +18,6 @@ ENV dev_libraries libavahi-client-dev libcrack2-dev libwrap0-dev autotools-dev l
 # Install prerequisites:
 RUN apt-get --quiet --yes install build-essential nano htop wget pkg-config checkinstall git avahi-daemon avahi-utils automake libtool db-util db5.3-util libgcrypt11 ${dev_libraries}
 
-# # Compiling libevent
-# WORKDIR /usr/local/src
-# RUN wget https://sourceforge.net/projects/levent/files/libevent/libevent-2.0/libevent-${libevent_version}.tar.gz \
-# 	&& tar xfv libevent-${libevent_version}.tar.gz \
-# 	&& cd libevent-${libevent_version} \
-# 	&& ./configure \
-# 	&& make \
-# 	&& checkinstall \
-# 		--pkgname=libevent-${libevent_version} \
-# 		--pkgversion=${libevent_version} \
-# 		--backup=no \
-# 		--deldoc=yes \
-# 		--default --fstrans=no
-
 # Compiling netatalk
 WORKDIR /usr/local/src
 RUN wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version}.tar.gz \
@@ -58,20 +44,16 @@ RUN wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version
 		--fstrans=no
 
 # Add default user and group
-RUN groupadd timemachine \
-	&& useradd timemachine -m -g timemachine -p 13yb934i7yfb \
-	&& mkdir -p /timemachine \
-	&& mkdir /var/run/dbus \
-	&& chown timemachine:timemachine /timemachine
+RUN  mkdir -p /timemachine \
+	&& mkdir /var/run/dbus
 
 # Create the log file
 RUN touch /var/log/afpd.log
 
-ADD config/afp.conf /usr/local/etc/afp.conf
 ADD config/nsswitch.conf /etc/nsswitch.conf
 ADD start_services.sh /start_services.sh
 
-EXPOSE 548 636 5353/udp
+EXPOSE 548 636
 
 VOLUME ["/timemachine"]
 
