@@ -26,9 +26,9 @@ To install the script, just execute `sudo cp timemachine.conf /etc/init/timemach
 
 ## Modify netatalk's configuration files
 
-If you want to modify the netatalk's configuration file, called `afp.conf`, you can do it cloning this repo, changing the contentes in `start_services.sh` script and the re-build the image with `sudo docker build .`.
+If you want to modify the netatalk's configuration file, called `afp.conf`, you can do it cloning this repo, changing the contents in `start_services.sh` script and the re-build the image with `sudo docker build .`.
 
-Also, you can change it by accessing the container and modifying it in live, but remember to save the chhanges like when the password was changed (see above).
+Also, you can change it by accessing the container and modifying it in live, but remember to save the changes like when the password was changed (see above).
 
 ## Contributors
 
