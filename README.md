@@ -11,7 +11,20 @@ If you don't want to specify the maximum volume size (and use all the space avai
 
 Now you have a docker instance running `avahi-daemon` and `netatalk`.
 
-**Note about auto-discovering:** due to network restrictions with Docker, avahi-daemon can't spread it's name in your home's LAN. To avoid this, you can try to manually create the AFP's configuration file in an avahi-daemon instance running in your host operating system. *But it is a untested configuration*.
+## Auto-discovering
+
+Avahi daemon is commonly used to help your computers to find the services provided by a server.
+
+Avahi isn't built into this Docker image because, due to Docker's networking limitations, Avahi can't spread it's messages to announce the services.
+
+If you want to enable this feature, you can install Avahi daemon in your host following this steps (Ubuntu version):
+
+* Install `avahi-daemons`: run `sudo apt-get install avahi-daemon avahi-utils`
+* Copy the file from `avahi/nsswitch.conf` to `/etc/nsswitch.conf`
+* Copy the service description file from `avahi/afpd.service` to `/etc/avahi/services/afpd.service`
+* Restart Avahi's daemon: `sudo /etc/init.d/avahi-daemon restart`
+
+*But why you need to install this on your host and not in the container?* Because if you don't do it this way, the discovery message won't be able to reach your computers.
 
 ## Auto start the service
 
