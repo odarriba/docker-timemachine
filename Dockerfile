@@ -13,10 +13,10 @@ RUN ln -s -f /bin/true /usr/bin/chfn
 # Versions to use
 ENV libevent_version 2.0.22-stable
 ENV netatalk_version 3.1.7
-ENV dev_libraries libavahi-client-dev libcrack2-dev libwrap0-dev autotools-dev libdb-dev libacl1-dev libdb5.3-dev libgcrypt11-dev libtdb-dev libkrb5-dev
+ENV dev_libraries libcrack2-dev libwrap0-dev autotools-dev libdb-dev libacl1-dev libdb5.3-dev libgcrypt11-dev libtdb-dev libkrb5-dev
 
 # Install prerequisites:
-RUN apt-get --quiet --yes install build-essential nano htop wget pkg-config checkinstall git avahi-daemon avahi-utils automake libtool db-util db5.3-util libgcrypt11 ${dev_libraries}
+RUN apt-get --quiet --yes install build-essential nano htop wget pkg-config checkinstall automake libtool db-util db5.3-util libgcrypt11 ${dev_libraries}
 
 # Compiling netatalk
 WORKDIR /usr/local/src
@@ -26,7 +26,7 @@ RUN wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version
 	&& ./configure \
 		--enable-debian \
 		--enable-krbV-uam \
-		--enable-zeroconf \
+		--disable-zeroconf \
 		--enable-krbV-uam \
 		--enable-tcp-wrappers \
 		--with-cracklib \
@@ -44,13 +44,11 @@ RUN wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version
 		--fstrans=no
 
 # Add default user and group
-RUN  mkdir -p /timemachine \
-	&& mkdir /var/run/dbus
+RUN  mkdir -p /timemachine
 
 # Create the log file
 RUN touch /var/log/afpd.log
 
-ADD config/nsswitch.conf /etc/nsswitch.conf
 ADD start_services.sh /start_services.sh
 
 EXPOSE 548 636

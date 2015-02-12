@@ -27,6 +27,7 @@ if [ ! -e /.initialized ]; then
 	mimic model = Xserve
 	log file = /var/log/afpd.log
 	log level = default:warn
+	zeroconf = no
 
 [${AFP_NAME}]
     path = /timemachine
@@ -41,14 +42,8 @@ if [ ! -e /.initialized ]; then
     touch /.initialized
 fi
 
-# Start D-Bus daemon
-mkdir -p /var/run/dbus
-rm -rf /var/run/dbus/pid
-dbus-daemon --system
-
 # Initiate the  time machine daemons
 chown -R $AFP_LOGIN:$AFP_LOGIN /timemachine
-service avahi-daemon start
 netatalk -F /usr/local/etc/afp.conf
 
 /bin/bash
