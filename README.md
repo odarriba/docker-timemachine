@@ -9,7 +9,7 @@ To download the docker container and execute it, simply run:
 
 If you don't want to specify the maximum volume size (and use all the space available), you can omit the `-e AFP_SIZE_LIMIT=<MAX_SIZE_IN_MB>` variable.
 
-Now you have a docker instance running `avahi-daemon` and `netatalk`.
+Now you have a docker instance running `netatalk`.
 
 ## Auto-discovering
 
