@@ -30,7 +30,7 @@ Avahi isn't built into this Docker image because, due to Docker's networking lim
 
 This repository contains a script to run the container at boot time **in Ubuntu-based distros**, but it requires that the container have been run manually at least one time.
 
-To install the script, just execute `sudo cp timemachine.conf /etc/init/timemachine.conf`.
+To install the script, just execute `sudo cp config/timemachine.conf /etc/init/timemachine.conf`.
 
 * To start the service: `sudo service timemachine start`
 * To stop the service: `sudo service timemachine stop`
