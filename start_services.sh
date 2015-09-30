@@ -46,4 +46,4 @@ fi
 chown -R $AFP_LOGIN:$AFP_LOGIN /timemachine
 netatalk -F /usr/local/etc/afp.conf
 
-/bin/bash
+tail -f /var/log/afpd.log
