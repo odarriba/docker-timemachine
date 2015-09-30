@@ -30,9 +30,9 @@ if [ ! -e /.initialized ]; then
 	zeroconf = no
 
 [${AFP_NAME}]
-    path = /timemachine
-    time machine = yes
-    valid users = ${AFP_LOGIN}" >> /usr/local/etc/afp.conf
+	path = /timemachine
+	time machine = yes
+	valid users = ${AFP_LOGIN}" >> /usr/local/etc/afp.conf
 
     if [ -n "$AFP_SIZE_LIMIT" ]; then
         echo "
