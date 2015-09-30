@@ -34,7 +34,7 @@ if [ ! -e /.initialized ]; then
     time machine = yes
     valid users = ${AFP_LOGIN}" >> /usr/local/etc/afp.conf
 
-    if [ -n $AFP_SIZE_LIMIT ]; then
+    if [ -n "$AFP_SIZE_LIMIT" ]; then
         echo "
 	vol size limit = ${AFP_SIZE_LIMIT}" >> /usr/local/etc/afp.conf
     fi
