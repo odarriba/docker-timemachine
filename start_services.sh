@@ -42,7 +42,7 @@ if [ ! -e /.initialized ]; then
     touch /.initialized
 fi
 
-# Initiate the  time machine daemons
+# Initiate the timemachine daemons
 chown -R $AFP_LOGIN:$AFP_LOGIN /timemachine
 netatalk -F /usr/local/etc/afp.conf
 
