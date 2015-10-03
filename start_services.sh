@@ -30,9 +30,9 @@ if [ ! -e /.initialized ]; then
 	zeroconf = no
 
 [${AFP_NAME}]
-    path = /timemachine
-    time machine = yes
-    valid users = ${AFP_LOGIN}" >> /usr/local/etc/afp.conf
+	path = /timemachine
+	time machine = yes
+	valid users = ${AFP_LOGIN}" >> /usr/local/etc/afp.conf
 
     if [ -n "$AFP_SIZE_LIMIT" ]; then
         echo "
@@ -42,7 +42,7 @@ if [ ! -e /.initialized ]; then
     touch /.initialized
 fi
 
-# Initiate the  time machine daemons
+# Initiate the timemachine daemons
 chown -R $AFP_LOGIN:$AFP_LOGIN /timemachine
 netatalk -F /usr/local/etc/afp.conf
 
