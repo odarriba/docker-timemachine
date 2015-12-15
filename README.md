@@ -47,3 +47,4 @@ Also, you can change it by accessing the container and modifying it in live, but
 
 * Óscar de Arriba (odarriba@gmail.com)
 * Daniel Iñigo (demil133@gmail.com)
+* Josef Friedrich ([@Josef-Friedrich](https://github.com/Josef-Friedrich))
