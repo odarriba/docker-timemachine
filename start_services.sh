@@ -44,6 +44,6 @@ fi
 
 # Initiate the timemachine daemons
 chown -R $AFP_LOGIN:$AFP_LOGIN /timemachine
-netatalk -F /usr/local/etc/afp.conf
+/etc/init.d/netatalk start
 
-tail -f /var/log/afpd.log
+/bin/bash

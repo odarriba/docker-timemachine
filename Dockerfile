@@ -12,7 +12,7 @@ RUN ln -s -f /bin/true /usr/bin/chfn
 
 # Versions to use
 ENV libevent_version 2.0.22-stable
-ENV netatalk_version 3.1.7
+ENV netatalk_version 3.1.8
 ENV dev_libraries libcrack2-dev libwrap0-dev autotools-dev libdb-dev libacl1-dev libdb5.3-dev libgcrypt11-dev libtdb-dev libkrb5-dev
 
 # Install prerequisites:
@@ -50,6 +50,7 @@ RUN  mkdir -p /timemachine
 RUN touch /var/log/afpd.log
 
 ADD start_services.sh /start_services.sh
+RUN update-rc.d netatalk defaults
 
 EXPOSE 548 636
 
