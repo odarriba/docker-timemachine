@@ -44,6 +44,11 @@ fi
 
 # Initiate the timemachine daemons
 chown -R $AFP_LOGIN:$AFP_LOGIN /timemachine
+
+# Clean out old locks
+/bin/rm -f /var/lock/netatalk
+
+# Launch netatalk server
 /etc/init.d/netatalk start
 
 /bin/bash
