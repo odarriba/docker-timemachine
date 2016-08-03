@@ -16,7 +16,7 @@ ENV netatalk_version 3.1.8
 ENV dev_libraries libcrack2-dev libwrap0-dev autotools-dev libdb-dev libacl1-dev libdb5.3-dev libgcrypt11-dev libtdb-dev libkrb5-dev
 
 # Install prerequisites:
-RUN apt-get --quiet --yes install build-essential nano htop wget pkg-config checkinstall automake libtool db-util db5.3-util libgcrypt11 ${dev_libraries}
+RUN apt-get --quiet --yes install build-essential wget pkg-config checkinstall automake libtool db-util db5.3-util libgcrypt11 ${dev_libraries}
 
 # Compiling netatalk
 WORKDIR /usr/local/src
