@@ -16,7 +16,7 @@ ENV netatalk_version 3.1.8
 ENV dev_libraries libcrack2-dev libwrap0-dev autotools-dev libdb-dev libacl1-dev libdb5.3-dev libgcrypt11-dev libtdb-dev libkrb5-dev
 
 # Install prerequisites:
-RUN apt-get --quiet --yes install build-essential wget pkg-config checkinstall automake libtool db-util db5.3-util libgcrypt11 ${dev_libraries}
+RUN apt-get --quiet --yes install build-essential wget pkg-config checkinstall automake libtool db-util db5.3-util libgcrypt11 ${dev_libraries} supervisor
 
 # Compiling netatalk
 WORKDIR /usr/local/src
@@ -46,9 +46,12 @@ RUN wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version
 # Add default user and group
 RUN  mkdir -p /timemachine
 
+RUN mkdir -p /var/log/supervisor
+
 # Create the log file
 RUN touch /var/log/afpd.log
 
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD start_services.sh /start_services.sh
 RUN update-rc.d netatalk defaults
 
@@ -56,4 +59,4 @@ EXPOSE 548 636
 
 VOLUME ["/timemachine"]
 
-CMD [ "/bin/bash", "/start_services.sh" ]
+CMD ["/usr/bin/supervisord"]
