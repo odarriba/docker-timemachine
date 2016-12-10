@@ -15,7 +15,6 @@ RUN apk update && \
     apk upgrade && \
     apk add \
       bash \
-      avahi \
       libldap \
       libgcrypt \
       python \
@@ -59,10 +58,12 @@ RUN apk update && \
       --enable-silent-rules \
       --with-cracklib \
       --with-cnid-cdb-backend \
+		  --with-init-style=debian-sysv \
       --enable-pgp-uam \
       --with-acls && \
     make && \
     make install && \
+    update-rc.d netatalk defaults && \
     cd /tmp && \
     rm -rf netatalk-${netatalk_version} netatalk-${netatalk_version}.tar.gz && \
     apk del .build-deps && \
