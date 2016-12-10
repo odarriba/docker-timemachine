@@ -15,6 +15,10 @@ fi
 # Clean out old locks
 /bin/rm -f /var/lock/netatalk
 
+if [ -e /var/run/avahi-daemon/pid ]; then
+    rm -rf /var/run/avahi-daemon/pid
+fi
+
 if [ ! -e /var/run/dbus/system_bus_socket ]; then
     dbus-daemon --system
 fi
