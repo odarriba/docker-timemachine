@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM hypriot/rpi-alpine-scratch
 MAINTAINER Óscar de Arriba <odarriba@gmail.com>
 
 ##################
