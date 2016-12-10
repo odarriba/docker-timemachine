@@ -82,4 +82,4 @@ EXPOSE 548 636
 
 VOLUME ["/timemachine"]
 
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
