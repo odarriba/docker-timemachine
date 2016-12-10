@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+if [[ $# -lt 3 ]]; then
+  echo "Usage: add-user USERNAME PASSWORD MOUNT_POINT [VOL_SIZE_MB]"
+  exit 1
+fi
+
+# Add the user
+addgroup $1
+adduser -S -H -G $1 $1
+echo $1:$2 | chpasswd
+
+# Create mountpoint
+mkdir -p $3
+chown -R $1:$2 $3
+
+# Add config to timemachine
+  echo "
+
+[${1}]
+    path = ${3}
+    time machine = yes
+    valid users = ${1}" >> /etc/afp.conf
+
+if [ -z "$4" ]; then
+  echo "
+    vol size limit = ${AFP_SIZE_LIMIT}" >> /etc/afp.conf
+fi
+
+pkill -HUP afpd
