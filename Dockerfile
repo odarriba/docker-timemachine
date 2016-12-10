@@ -63,7 +63,6 @@ RUN apk update && \
       --with-acls && \
     make && \
     make install && \
-    update-rc.d netatalk defaults && \
     cd /tmp && \
     rm -rf netatalk-${netatalk_version} netatalk-${netatalk_version}.tar.gz && \
     apk del .build-deps && \
