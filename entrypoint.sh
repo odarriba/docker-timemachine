@@ -2,6 +2,8 @@
 
 set -e
 
+mkdir -p /conf.d/netatalk
+
 # Need to initialize?
 if [ ! -e /.initialized ]; then
     if [ -z $AFP_LOGIN ]; then
@@ -20,7 +22,8 @@ if [ ! -e /.initialized ]; then
     fi
 
     # Add the user
-    useradd $AFP_LOGIN -M
+    addgroup $AFP_LOGIN
+    adduser -S -H -G $AFP_LOGIN $AFP_LOGIN
     echo $AFP_LOGIN:$AFP_PASSWORD | chpasswd
 
     echo "[Global]
@@ -32,11 +35,11 @@ if [ ! -e /.initialized ]; then
 [${AFP_NAME}]
 	path = /timemachine
 	time machine = yes
-	valid users = ${AFP_LOGIN}" >> /usr/local/etc/afp.conf
+	valid users = ${AFP_LOGIN}" >> /etc/afp.conf
 
     if [ -n "$AFP_SIZE_LIMIT" ]; then
         echo "
-	vol size limit = ${AFP_SIZE_LIMIT}" >> /usr/local/etc/afp.conf
+	vol size limit = ${AFP_SIZE_LIMIT}" >> /etc/afp.conf
     fi
 
     touch /.initialized
@@ -48,7 +51,9 @@ chown -R $AFP_LOGIN:$AFP_LOGIN /timemachine
 # Clean out old locks
 /bin/rm -f /var/lock/netatalk
 
-# Launch netatalk server
-/etc/init.d/netatalk start
+if [ ! -e /var/run/dbus/system_bus_socket ]; then
+	dbus-daemon --system
+fi
 
-/bin/bash
+avahi-daemon -D
+exec netatalk -d

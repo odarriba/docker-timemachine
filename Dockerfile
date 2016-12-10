@@ -8,12 +8,13 @@ MAINTAINER Óscar de Arriba <odarriba@gmail.com>
 # Versions to use
 ENV netatalk_version 3.1.8
 
-WORKDIR /tmp
+WORKDIR /
 
 # Prerequisites
 RUN apk update && \
     apk upgrade && \
-    apk add --nocache \
+    apk add --no-cache \
+      bash \
       avahi \
       libldap \
       libgcrypt \
@@ -26,8 +27,9 @@ RUN apk update && \
       db \
       libevent \
       file \
+      acl \
       openssl && \
-    apk add --nocache --virtual .build-deps \
+    apk add --no-cache --virtual .build-deps \
       build-base \
       autoconf \
       automake \
@@ -36,19 +38,23 @@ RUN apk update && \
       libgcrypt-dev \
       linux-pam-dev \
       cracklib-dev \
+      acl-dev \
       db-dev \
+      dbus-dev \
       libevent-dev && \
-    # Fake chfn
     ln -s -f /bin/true /usr/bin/chfn && \
-    # Compile netatalk
+    cd /tmp && \
     wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version}.tar.gz && \
     tar xvf netatalk-${netatalk_version}.tar.gz && \
-    cd netatalk-${netatalk_version} \
+    cd netatalk-${netatalk_version} && \
     CFLAGS="-Wno-unused-result -O2" ./configure \
       --prefix=/usr \
       --localstatedir=/var/state \
       --sysconfdir=/etc \
+      --with-dbus-sysconf-dir=/etc/dbus-1/system.d/ \
       --sbindir=/usr/bin \
+      --enable-quota \
+      --with-tdb \
       --enable-silent-rules \
       --with-cracklib \
       --with-cnid-cdb-backend \
@@ -56,7 +62,6 @@ RUN apk update && \
       --with-acls && \
     make && \
     make install && \
-    # Remove dev dependencies
     cd /tmp && \
     rm -rf netatalk-${netatalk_version} netatalk-${netatalk_version}.tar.gz && \
     apk del .build-deps
@@ -72,4 +77,4 @@ EXPOSE 548 636
 
 VOLUME ["/timemachine"]
 
-CMD ["entrypoint.sh"]
+CMD ["/bin/bash", "/entrypoint.sh"]
