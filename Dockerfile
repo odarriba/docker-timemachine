@@ -1,62 +1,75 @@
-FROM ubuntu:14.04
+FROM alpine:latest
 MAINTAINER Óscar de Arriba <odarriba@gmail.com>
 
 ##################
 ##   BUILDING   ##
 ##################
 
-# Prerequisites
-RUN apt-get --quiet --yes update
-ENV DEBIAN_FRONTEND noninteractive
-RUN ln -s -f /bin/true /usr/bin/chfn
-
 # Versions to use
-ENV libevent_version 2.0.22-stable
 ENV netatalk_version 3.1.8
-ENV dev_libraries libcrack2-dev libwrap0-dev autotools-dev libdb-dev libacl1-dev libdb5.3-dev libgcrypt11-dev libtdb-dev libkrb5-dev
 
-# Install prerequisites:
-RUN apt-get --quiet --yes install build-essential wget pkg-config checkinstall automake libtool db-util db5.3-util libgcrypt11 ${dev_libraries} supervisor
+WORKDIR /tmp
 
-# Compiling netatalk
-WORKDIR /usr/local/src
-RUN wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version}.tar.gz \
-	&& tar xvf netatalk-${netatalk_version}.tar.gz \
-	&& cd netatalk-${netatalk_version} \
-	&& ./configure \
-		--enable-debian \
-		--enable-krbV-uam \
-		--disable-zeroconf \
-		--enable-krbV-uam \
-		--enable-tcp-wrappers \
-		--with-cracklib \
-		--with-acls \
-		--with-dbus-sysconf-dir=/etc/dbus-1/system.d \
-		--with-init-style=debian-sysv \
-		--with-pam-confdir=/etc/pam.d \
-	&& make \
-	&& checkinstall \
-		--pkgname=netatalk \
-		--pkgversion=$netatalk_version \
-		--backup=no \
-		--deldoc=yes \
-		--default \
-		--fstrans=no
+# Prerequisites
+RUN apk update && \
+    apk upgrade && \
+    apk add --nocache \
+      avahi \
+      libldap \
+      libgcrypt \
+      python \
+      dbus \
+      dbus-glib \
+      py-dbus \
+      linux-pam \
+      cracklib \
+      db \
+      libevent \
+      file \
+      openssl && \
+    apk add --nocache --virtual .build-deps \
+      build-base \
+      autoconf \
+      automake \
+      libtool \
+      avahi-dev \
+      libgcrypt-dev \
+      linux-pam-dev \
+      cracklib-dev \
+      db-dev \
+      libevent-dev && \
+    # Fake chfn
+    ln -s -f /bin/true /usr/bin/chfn && \
+    # Compile netatalk
+    wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version}.tar.gz && \
+    tar xvf netatalk-${netatalk_version}.tar.gz && \
+    cd netatalk-${netatalk_version} \
+    CFLAGS="-Wno-unused-result -O2" ./configure \
+      --prefix=/usr \
+      --localstatedir=/var/state \
+      --sysconfdir=/etc \
+      --sbindir=/usr/bin \
+      --enable-silent-rules \
+      --with-cracklib \
+      --with-cnid-cdb-backend \
+      --enable-pgp-uam \
+      --with-acls && \
+    make && \
+    make install && \
+    # Remove dev dependencies
+    cd /tmp && \
+    rm -rf netatalk-${netatalk_version} netatalk-${netatalk_version}.tar.gz && \
+    apk del .build-deps
 
-# Add default user and group
 RUN  mkdir -p /timemachine
-
-RUN mkdir -p /var/log/supervisor
 
 # Create the log file
 RUN touch /var/log/afpd.log
 
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-ADD start_services.sh /start_services.sh
-RUN update-rc.d netatalk defaults
+ADD entrypoint.sh /entrypoint.sh
 
 EXPOSE 548 636
 
 VOLUME ["/timemachine"]
 
-CMD ["/usr/bin/supervisord"]
+CMD ["entrypoint.sh"]
