@@ -28,7 +28,8 @@ RUN apk update && \
       libevent \
       file \
       acl \
-      openssl && \
+      openssl \
+      supervisor && \
     apk add --virtual .build-deps \
       build-base \
       autoconf \
@@ -67,16 +68,18 @@ RUN apk update && \
     apk del .build-deps && \
 		rm -rf /var/cache/apk/*
 
-RUN  mkdir -p /timemachine
+RUN mkdir -p /timemachine && \
+    mkdir -p /var/log/supervisor
 
 # Create the log file
 RUN touch /var/log/afpd.log
 
 ADD entrypoint.sh /entrypoint.sh
 ADD bin/add-account /usr/bin/add-account
+ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 548 636
 
 VOLUME ["/timemachine"]
 
-CMD ["/bin/bash", "/entrypoint.sh"]
+CMD ["/usr/bin/supervisord"]
