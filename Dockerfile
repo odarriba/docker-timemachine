@@ -72,6 +72,7 @@ RUN  mkdir -p /timemachine
 RUN touch /var/log/afpd.log
 
 ADD entrypoint.sh /entrypoint.sh
+ADD bin/add-account /usr/bin/add-account
 
 EXPOSE 548 636
 
