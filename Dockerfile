@@ -13,7 +13,7 @@ WORKDIR /
 # Prerequisites
 RUN apk update && \
     apk upgrade && \
-    apk add --no-cache \
+    apk add \
       bash \
       avahi \
       libldap \
@@ -29,7 +29,7 @@ RUN apk update && \
       file \
       acl \
       openssl && \
-    apk add --no-cache --virtual .build-deps \
+    apk add --virtual .build-deps \
       build-base \
       autoconf \
       automake \
@@ -64,7 +64,8 @@ RUN apk update && \
     make install && \
     cd /tmp && \
     rm -rf netatalk-${netatalk_version} netatalk-${netatalk_version}.tar.gz && \
-    apk del .build-deps
+    apk del .build-deps && \
+		rm -rf /var/cache/apk/*
 
 RUN  mkdir -p /timemachine
 
