@@ -45,7 +45,7 @@ RUN apk update && \
     ln -s -f /bin/true /usr/bin/chfn && \
     cd /tmp && \
     wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version}.tar.gz && \
-    tar xvf netatalk-${netatalk_version}.tar.gz && \
+    tar xvzf netatalk-${netatalk_version}.tar.gz && \
     cd netatalk-${netatalk_version} && \
     CFLAGS="-Wno-unused-result -O2" ./configure \
       --prefix=/usr \
