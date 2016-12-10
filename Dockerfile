@@ -34,7 +34,6 @@ RUN apk update && \
       autoconf \
       automake \
       libtool \
-      avahi-dev \
       libgcrypt-dev \
       linux-pam-dev \
       cracklib-dev \
