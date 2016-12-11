@@ -15,7 +15,6 @@ RUN apk update && \
     apk upgrade && \
     apk add --no-cache \
       bash \
-      avahi \
       libldap \
       libgcrypt \
       python \
@@ -28,13 +27,13 @@ RUN apk update && \
       libevent \
       file \
       acl \
-      openssl && \
+      openssl \
+      supervisor && \
     apk add --no-cache --virtual .build-deps \
       build-base \
       autoconf \
       automake \
       libtool \
-      avahi-dev \
       libgcrypt-dev \
       linux-pam-dev \
       cracklib-dev \
@@ -52,6 +51,7 @@ RUN apk update && \
       --localstatedir=/var/state \
       --sysconfdir=/etc \
       --with-dbus-sysconf-dir=/etc/dbus-1/system.d/ \
+      --with-init-style=debian-sysv \
       --sbindir=/usr/bin \
       --enable-quota \
       --with-tdb \
@@ -66,16 +66,19 @@ RUN apk update && \
     rm -rf netatalk-${netatalk_version} netatalk-${netatalk_version}.tar.gz && \
     apk del .build-deps
 
-RUN  mkdir -p /timemachine
+
+RUN mkdir -p /timemachine && \
+    mkdir -p /var/log/supervisor
 
 # Create the log file
 RUN touch /var/log/afpd.log
 
 ADD entrypoint.sh /entrypoint.sh
 ADD bin/add-account /usr/bin/add-account
+ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 548 636
 
 VOLUME ["/timemachine"]
 
-CMD ["/bin/bash", "/entrypoint.sh"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
