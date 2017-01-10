@@ -21,6 +21,19 @@ But take care that:
 
 Now you have a docker instance running `netatalk`.
 
+### Configure using environment variables
+
+You can configure the container using environment variables (for example, if you use a `docker-compose` environment).
+
+There are this environment variables:
+
+* **AFP_LOGIN**: User name
+* **AFP_PASSWORD**: User password
+* **AFP_NAME**: Name of the volume
+* **AFP_SIZE_LIMIT**: Size in MB of the volume (optional)
+
+Using this variables, the container will create a user at boot time (only one per container).
+
 ## Auto-discovering
 
 Avahi daemon is commonly used to help your computers to find the services provided by a server.
