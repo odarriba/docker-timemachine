@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 if [[ $# -lt 3 ]]; then
   echo "Usage: add-user USERNAME PASSWORD MOUNT_POINT [VOL_SIZE_MB]"
   exit 1
