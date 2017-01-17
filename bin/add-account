@@ -28,3 +28,4 @@ if [[ $# -eq 4 ]]; then
 fi
 
 pkill -HUP afpd
+exit 0
