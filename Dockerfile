@@ -74,6 +74,7 @@ RUN mkdir -p /timemachine && \
 RUN touch /var/log/afpd.log
 
 ADD entrypoint.sh /entrypoint.sh
+ADD start_netatalk.sh /start_netatalk.sh
 ADD bin/add-account /usr/bin/add-account
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
@@ -81,4 +82,4 @@ EXPOSE 548 636
 
 VOLUME ["/timemachine"]
 
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+CMD ["/entrypoint.sh"]
