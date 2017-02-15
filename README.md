@@ -47,7 +47,17 @@ Avahi isn't built into this Docker image because, due to Docker's networking lim
 * Restart Avahi's daemon: `sudo /etc/init.d/avahi-daemon restart`
 
 
-### Step 4 - Start Using It
+### Step 4 - Configure Your Firewall
+
+Make sure
+
+* your server can receive traffic on port `548` and `636` (e.g., `ufw allow 548` (`636` respectively).
+
+* your Mac allows outgoing connections (Little Snitch?)
+
+
+
+### Step 5 - Start Using It
 
 To start using it, follow these steps:
 
@@ -83,10 +93,21 @@ Using these variables, the container will create a user at boot time (only one p
 
 ## FAQ
 
-#### I don't find the service in Time Machine.
+
+#### I got Docker running, my firewall is configured, but I still don't find the service in Time Machine.
+
+Make sure you actually mount the server volume (see Step 5) before trying to find it in Time Machine settingss.  
+
+#### I am still having trouble ...
+
+* The idea of using avahi-daemon installed in the bare metal server is to avoid having to execute the container with --net=host, which a potentially insecure flag (/cc @stephen-mw). But, as the last option to check things out, it should be fine. You just should know what you are enabling.
+
+* A Time Machine network disk is just a disk image in an AFP volume that supports the correct level of encryption. So to be recognised by the TimeMachine daemon, you should mount the unit manually for the first time, configure TimeMachine on your computer, and then the OS will do that for you automatically.
+
 
 
 #### Why do I need to install Avahi on your host and not in the container?
+
 Because if you don't do it this way, the discovery message won't be able to reach your computers.
 
 
