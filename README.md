@@ -1,25 +1,71 @@
 # docker-timemachine
 A docker container to compile the lastest version of Netatalk in order to run a Time Machine server.
 
+
 ## Installation
+
+### Step 1 - Start the Server
 
 To download the docker container and execute it, simply run:
 
 ```
-$ docker run -h timemachine --name timemachine --restart=unless-stopped -d -v /route/to/your/timemachine:/timemachine -it -p 548:548 -p 636:636 odarriba/timemachine
+$ docker run -h timemachine --name timemachine --restart=unless-stopped -d -v /external_volume:/timemachine -it -p 548:548 -p 636:636 odarriba/timemachine
 ```
 
-To add users, just run this command:
+Replace `external_volume` with a local path where you want to store your data.
+
+As the image has been started using the `--restart=always` flag, it will start when the computers boots up.
+
+
+
+### Step 2 - Add a User
+
+To add a user, run:
 
 ```
 $ docker exec timemachine add-account USERNAME PASSWORD MOUNT_POINT [VOL_SIZE_MB]
 ```
 
 But take care that:
-* `MOUNT_POINT` should be an absolute path, preferably inside `/timemachine`, so it will be stored in your external volume.
+* `MOUNT_POINT` should be an absolute path, preferably set it to `"/timemachine"`, so it will be stored right in your external volume.
 * `VOL_SIZE_MB` is an optional parameter. It indicates the max volume size for that user.
 
 Now you have a docker instance running `netatalk`.
+
+
+### Step 3 - Enable Auto Discovery
+
+Avahi daemon is commonly used to help your computers to find the services provided by a server.
+
+Avahi isn't built into this Docker image because, due to Docker's networking limitations, Avahi can't spread it's messages to announce the services.
+
+**If you want to enable this feature, you can install Avahi daemon on your host** following these steps (Ubuntu version):
+
+* Install `avahi-daemon`: run `sudo apt-get install avahi-daemon avahi-utils`
+* Copy the file from `avahi/nsswitch.conf` to `/etc/nsswitch.conf`
+* Copy the service description file from `avahi/afpd.service` to `/etc/avahi/services/afpd.service`
+* Restart Avahi's daemon: `sudo /etc/init.d/avahi-daemon restart`
+
+
+### Step 4 - Start Using It
+
+To start using it, follow these steps:
+
+* If you use Avahi, open **Finder**, go to **Shared** and connect to your server with your new username and password. Alternatively, or if you don't use Avahi, from **Finder** press **CMD-K** and type `afp://your-server-name`.
+
+* Go to **System Preferences**, and open **Time Machine** settings.
+
+* Open **Add or Remove Backup Disk...**
+
+* Select your new volume.
+
+
+In the example below, the Docker instance is running on server `central`. For `USERNAME` the account `Backup` along with a `PASSWORD`. Once connected, the account `Backup` is available in Time Machine settings.
+
+![alt text](docs/overview.jpg "Getting Started")
+
+
+## Advanced Usage
 
 ### Configure using environment variables
 
@@ -34,24 +80,16 @@ There are these environment variables:
 
 Using these variables, the container will create a user at boot time (only one per container).
 
-## Auto-discovering
 
-Avahi daemon is commonly used to help your computers to find the services provided by a server.
+## FAQ
 
-Avahi isn't built into this Docker image because, due to Docker's networking limitations, Avahi can't spread it's messages to announce the services.
+#### I don't find the service in Time Machine.
 
-**If you want to enable this feature, you can install Avahi daemon on your host** following these steps (Ubuntu version):
 
-* Install `avahi-daemon`: run `sudo apt-get install avahi-daemon avahi-utils`
-* Copy the file from `avahi/nsswitch.conf` to `/etc/nsswitch.conf`
-* Copy the service description file from `avahi/afpd.service` to `/etc/avahi/services/afpd.service`
-* Restart Avahi's daemon: `sudo /etc/init.d/avahi-daemon restart`
+#### Why do I need to install Avahi on your host and not in the container?
+Because if you don't do it this way, the discovery message won't be able to reach your computers.
 
-**But why install this on your host and not in the container?** Because if you don't do it this way, the discovery message won't be able to reach your computers.
 
-## Auto start the service
-
-As the image has been started using the `--restart=always` flag, it will start when the computers boots up.
 
 ## Contributors
 
