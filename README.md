@@ -51,7 +51,7 @@ Avahi isn't built into this Docker image because, due to Docker's networking lim
 
 Make sure
 
-* your server can receive traffic on port `548` and `636` (e.g., `ufw allow 548` (`636` respectively).
+* your server can receive traffic on port `548` and `636` (e.g., `ufw allow 548`, (`636` respectively)).
 
 * your Mac allows outgoing connections (Little Snitch?)
 
@@ -70,8 +70,7 @@ To start using it, follow these steps:
 * Select your new volume.
 
 
-In the example below, the Docker instance is running on server `central`. For `USERNAME` the account `Backup` along with a `PASSWORD`. Once connected, the account `Backup` is available in Time Machine settings.
-
+In the example below, the Docker instance is running on server `central`. For `USERNAME` the account `Backup` along with a `PASSWORD` was created. Once connected, the account `Backup` is available in Time Machine settings:
 ![alt text](docs/overview.jpg "Getting Started")
 
 
