@@ -27,7 +27,7 @@ $ docker exec timemachine add-account USERNAME PASSWORD MOUNT_POINT [VOL_SIZE_MB
 ```
 
 But take care that:
-* `MOUNT_POINT` should be an absolute path, preferably set it to `"/timemachine"`, so it will be stored right in your external volume.
+* `MOUNT_POINT` should be an absolute path, preferably a sub-path of `/timemachine` (e.g., `/timemachine/backup`), so it will be stored in the according sub-path of your external volume.
 * `VOL_SIZE_MB` is an optional parameter. It indicates the max volume size for that user.
 
 Now you have a docker instance running `netatalk`.
@@ -61,7 +61,9 @@ Make sure
 
 To start using it, follow these steps:
 
-* If you use Avahi, open **Finder**, go to **Shared** and connect to your server with your new username and password. Alternatively, or if you don't use Avahi, from **Finder** press **CMD-K** and type `afp://your-server-name`.
+* If you use Avahi, open **Finder**, go to **Shared** and connect to your server with your new username and password.
+
+* Alternatively (or if you don't use Avahi) from **Finder** press **CMD-K** and type `afp://your-server` where `your-server` can be your server's name or IP address (e.g., `afp://my-server` or `afp://192.168.0.5`).
 
 * Go to **System Preferences**, and open **Time Machine** settings.
 
@@ -99,7 +101,7 @@ Make sure you actually mount the server volume (see Step 5) before trying to fin
 
 #### I am still having trouble ...
 
-* The idea of using avahi-daemon installed in the bare metal server is to avoid having to execute the container with --net=host, which a potentially insecure flag (/cc @stephen-mw). But, as the last option to check things out, it should be fine. You just should know what you are enabling.
+* The idea of using avahi-daemon installed in the bare metal server is to avoid having to execute the container with --net=host, which a potentially insecure flag. But, as the last option to check things out, it should be fine. You just should know what you are enabling.
 
 * A Time Machine network disk is just a disk image in an AFP volume that supports the correct level of encryption. So to be recognised by the TimeMachine daemon, you should mount the unit manually for the first time, configure TimeMachine on your computer, and then the OS will do that for you automatically.
 
