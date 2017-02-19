@@ -6,7 +6,7 @@ MAINTAINER Óscar de Arriba <odarriba@gmail.com>
 ##################
 
 # Versions to use
-ENV netatalk_version 3.1.8
+ENV netatalk_version 3.1.10
 
 WORKDIR /
 
@@ -15,6 +15,7 @@ RUN apk update && \
     apk upgrade && \
     apk add --no-cache \
       bash \
+      curl \
       libldap \
       libgcrypt \
       python \
@@ -43,7 +44,7 @@ RUN apk update && \
       libevent-dev && \
     ln -s -f /bin/true /usr/bin/chfn && \
     cd /tmp && \
-    wget http://prdownloads.sourceforge.net/netatalk/netatalk-${netatalk_version}.tar.gz && \
+    curl -o netatalk-${netatalk_version}.tar.gz -L https://downloads.sourceforge.net/project/netatalk/netatalk/${netatalk_version}/netatalk-${netatalk_version}.tar.gz && \
     tar xvf netatalk-${netatalk_version}.tar.gz && \
     cd netatalk-${netatalk_version} && \
     CFLAGS="-Wno-unused-result -O2" ./configure \
