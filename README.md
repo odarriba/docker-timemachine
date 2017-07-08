@@ -1,6 +1,8 @@
 # docker-timemachine
 A docker container to compile the lastest version of Netatalk in order to run a Time Machine server.
 
+## Platforms
+If you want to use this on an ARM-Device, use this Branch instead: https://github.com/odarriba/docker-timemachine/tree/rpi
 
 ## Installation
 
