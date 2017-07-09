@@ -17,7 +17,7 @@ if [ ! -e /.initialized_afp ]; then
 fi
 
 if [ ! -e /.initialized_user ] && [ ! -z $AFP_LOGIN ] && [ ! -z $AFP_PASSWORD ] && [ ! -z $AFP_NAME ]; then
-    add-account $AFP_LOGIN $AFP_PASSWORD $AFP_NAME $AFP_SIZE_LIMIT
+    add-account $AFP_LOGIN $AFP_PASSWORD $AFP_NAME /timemachine $AFP_SIZE_LIMIT
     touch /.initialized_user
 fi
 
