@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ $# -lt 3 ]]; then
-  echo "Usage: add-user USERNAME PASSWORD MOUNT_POINT [VOL_SIZE_MB]"
+  echo "Usage: add-user USERNAME PASSWORD VOL_NAME MOUNT_POINT [VOL_SIZE_MB]"
   exit 1
 fi
 
@@ -15,10 +15,11 @@ chown -R $1:root $3
 
 # Add config to timemachine
   echo "
-[${1}]
+[${3}]
     path = ${3}
     time machine = yes
-    valid users = ${1}" >> /etc/afp.conf
+    valid users = ${1}
+    spotlight = no" >> /etc/afp.conf
 
 if [[ $# -eq 4 ]]; then
   echo "
