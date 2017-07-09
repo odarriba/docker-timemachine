@@ -25,10 +25,11 @@ As the image has been started using the `--restart=always` flag, it will start w
 To add a user, run:
 
 ```
-$ docker exec timemachine add-account USERNAME PASSWORD MOUNT_POINT [VOL_SIZE_MB]
+$ docker exec timemachine add-account USERNAME PASSWORD VOL_NAME MOUNT_POINT [VOL_SIZE_MB]
 ```
 
 But take care that:
+* `VOL_NAME` will be the name of the volume shown on your OSX as the network drive
 * `MOUNT_POINT` should be an absolute path, preferably a sub-path of `/timemachine` (e.g., `/timemachine/backup`), so it will be stored in the according sub-path of your external volume.
 * `VOL_SIZE_MB` is an optional parameter. It indicates the max volume size for that user.
 
@@ -91,7 +92,7 @@ There are these environment variables:
 * **AFP_NAME**: Name of the volume
 * **AFP_SIZE_LIMIT**: Size in MB of the volume (optional)
 
-Using these variables, the container will create a user at boot time (only one per container).
+Using these variables, the container will create a user at boot time (only one per container) and **the data will be stored directly in the volume `/timemachine`, without subfolders**.
 
 
 ## FAQ
@@ -99,7 +100,7 @@ Using these variables, the container will create a user at boot time (only one p
 
 #### I got Docker running, my firewall is configured, but I still don't find the service in Time Machine.
 
-Make sure you actually mount the server volume (see Step 5) before trying to find it in Time Machine settingss.  
+Make sure you actually mount the server volume (see Step 5) before trying to find it in Time Machine settingss.
 
 #### I am still having trouble ...
 
