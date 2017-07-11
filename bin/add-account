@@ -5,20 +5,19 @@ if [[ $# -lt 4 ]]; then
   exit 1
 fi
 
-ABSOLUTEPATH="$4/$3"
 
 # Add the user
 adduser -S -H -G root $1
 echo $1:$2 | chpasswd
 
 # Create mountpoint
-mkdir -p $ABSOLUTEPATH
-chown -R $1:root $ABSOLUTEPATH
+mkdir -p ${4}
+chown -R $1:root ${4}
 
 # Add config to timemachine
   echo "
 [${3}]
-    path = $ABSOLUTEPATH
+    path = ${4}
     time machine = yes
     valid users = ${1}
     spotlight = no" >> /etc/afp.conf
