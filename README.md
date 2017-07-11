@@ -1,8 +1,18 @@
 # docker-timemachine
 A docker container to compile the lastest version of Netatalk in order to run a Time Machine server.
 
-## Platforms
-If you want to use this on an ARM-Device, use this Branch instead: https://github.com/odarriba/docker-timemachine/tree/rpi
+## Running on ARM / RPi
+If you want to use this on an ARM-Device (like the Raspberry Pi), you have two options:
+
+- Get the precompiled image (latest compilation on 11-07-2017):
+    ```
+    $ docker run -h timemachine --name timemachine --restart=unless-stopped -d -v /external_volume:/timemachine -it -p 548:548 -p 636:636 odarriba/timemachine-rpi
+    ```
+- Build the image directly on your device:
+    ```
+    $ docker build -t timemachine-rpi:latest -f Dockerfile.rpi .
+    $ docker run -h timemachine --name timemachine --restart=unless-stopped -d -v /external_volume:/timemachine -it -p 548:548 -p 636:636 timemachine-rpi
+    ```
 
 ## Installation
 
