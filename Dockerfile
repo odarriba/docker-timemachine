@@ -67,7 +67,6 @@ RUN apk update && \
     rm -rf netatalk-${netatalk_version} netatalk-${netatalk_version}.tar.gz && \
     apk del .build-deps
 
-
 RUN mkdir -p /timemachine && \
     mkdir -p /var/log/supervisor
 
