@@ -1,29 +1,31 @@
 #!/bin/bash
 
-if [[ $# -lt 3 ]]; then
-  echo "Usage: add-user USERNAME PASSWORD VOL_NAME MOUNT_POINT [VOL_SIZE_MB]"
+if [[ $# -lt 4 ]]; then
+  echo "Usage: add-account USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]"
   exit 1
 fi
+
+ABSOLUTEPATH="$4/$3"
 
 # Add the user
 adduser -S -H -G root $1
 echo $1:$2 | chpasswd
 
 # Create mountpoint
-mkdir -p $3
-chown -R $1:root $3
+mkdir -p $ABSOLUTEPATH
+chown -R $1:root $ABSOLUTEPATH
 
 # Add config to timemachine
   echo "
 [${3}]
-    path = ${3}
+    path = $ABSOLUTEPATH
     time machine = yes
     valid users = ${1}
     spotlight = no" >> /etc/afp.conf
 
-if [[ $# -eq 4 ]]; then
+if [[ $# -eq 5 ]]; then
   echo "
-    vol size limit = ${4}" >> /etc/afp.conf
+    vol size limit = ${5}" >> /etc/afp.conf
 fi
 
 pkill -HUP afpd
