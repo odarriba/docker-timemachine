@@ -25,12 +25,12 @@ As the image has been started using the `--restart=always` flag, it will start w
 To add a user, run:
 
 ```
-$ docker exec timemachine add-account USERNAME PASSWORD VOL_NAME MOUNT_POINT [VOL_SIZE_MB]
+$ docker exec timemachine add-account USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]
 ```
 
 But take care that:
 * `VOL_NAME` will be the name of the volume shown on your OSX as the network drive
-* `MOUNT_POINT` should be an absolute path, preferably a sub-path of `/timemachine` (e.g., `/timemachine/backup`), so it will be stored in the according sub-path of your external volume.
+* `VOL_ROOT` should be an absolute path, preferably a sub-path of `/timemachine` (e.g., `/timemachine/backup`), so it will be stored in the according sub-path of your external volume.
 * `VOL_SIZE_MB` is an optional parameter. It indicates the max volume size for that user.
 
 Now you have a docker instance running `netatalk`.
