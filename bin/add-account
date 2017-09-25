@@ -1,18 +1,32 @@
 #!/bin/bash
 
+while getopts ":i:g:e:" Option
+do
+  case $Option in
+    i ) _uid=$OPTARG ;;
+    g ) _gid=$OPTARG ;;
+  esac
+done
+shift $(($OPTIND - 1))
+
 if [[ $# -lt 4 ]]; then
-  echo "Usage: add-account USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]"
+  echo "Usage: add-account [ -i uid -g gid ] USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]"
   exit 1
 fi
 
-
-# Add the user
-adduser -S -H -G root $1
-echo $1:$2 | chpasswd
-
 # Create mountpoint
 mkdir -p ${4}
-chown -R $1:root ${4}
+
+if [[ $_uid ]] && [[ $_gid ]]; then
+  addgroup -g $_gid $1
+  adduser -u $_uid -S -H $1
+  chown -R $1:$1 ${4}
+else
+  adduser -S -H -G root $1
+  chown -R $1:root ${4}
+fi
+
+echo $1:$2 | chpasswd
 
 # Add config to timemachine
   echo "
