@@ -38,6 +38,12 @@ To add a user, run:
 $ docker exec timemachine add-account USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]
 ```
 
+Or, if you want to add a user with a specific UID/GID, use the following format
+
+```
+$ docker exec timemachine add account -i 1000 -g 1000 USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]
+```
+
 But take care that:
 * `VOL_NAME` will be the name of the volume shown on your OSX as the network drive
 * `VOL_ROOT` should be an absolute path, preferably a sub-path of `/timemachine` (e.g., `/timemachine/backup`), so it will be stored in the according sub-path of your external volume.
