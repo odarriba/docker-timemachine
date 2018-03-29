@@ -68,7 +68,8 @@ RUN apk update && \
     apk del .build-deps
 
 RUN mkdir -p /timemachine && \
-    mkdir -p /var/log/supervisor
+    mkdir -p /var/log/supervisor && \
+    mkdir -p /conf.d/netatalk
 
 # Create the log file
 RUN touch /var/log/afpd.log
@@ -77,6 +78,7 @@ ADD entrypoint.sh /entrypoint.sh
 ADD start_netatalk.sh /start_netatalk.sh
 ADD bin/add-account /usr/bin/add-account
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD afp.conf /etc/afp.conf
 
 EXPOSE 548 636
 
