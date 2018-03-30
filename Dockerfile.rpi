@@ -78,6 +78,7 @@ ADD entrypoint.sh /entrypoint.sh
 ADD start_netatalk.sh /start_netatalk.sh
 ADD bin/add-account /usr/bin/add-account
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD afp.conf /etc/afp.conf
 
 EXPOSE 548 636
 
