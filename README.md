@@ -4,7 +4,7 @@ A docker container to compile the lastest version of Netatalk in order to run a 
 ## Running on ARM / RPi
 If you want to use this on an ARM-Device (like the Raspberry Pi), you have two options:
 
-- Get the precompiled image (latest compilation on 11-07-2017):
+- Get the precompiled image (latest compilation on 29-03-2018):
     ```
     $ docker run -h timemachine --name timemachine --restart=unless-stopped -d -v /external_volume:/timemachine -it -p 548:548 -p 636:636 odarriba/timemachine-rpi
     ```
@@ -117,6 +117,28 @@ Using these variables, the container will create a user at boot time (only one p
 #### I got Docker running, my firewall is configured, but I still don't find the service in Time Machine.
 
 Make sure you actually mount the server volume (see Step 5) before trying to find it in Time Machine settingss.
+
+
+### My container restarted and I can't login
+
+The user accounts are ephemeral and you'll have to run `Step 2` again to re-create the accounts.
+Alternativey, you can script the account creation and upload a custom entrypoint with the details:
+
+```bash
+#!/bin/bash
+set -e
+
+# Repeat for all your accounts
+add-account USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]
+add-account USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]
+/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+```
+
+Save the above file as `entrypoint.sh` and make sure it is marked as executable (`chmod +x entrypoint.sh`). Then invoke `docker run` as:
+
+```
+$ docker run -h timemachine --name timemachine --restart=unless-stopped -d -v /external_volume:/timemachine -it -p 548:548 -p 636:636 -v entrypoint.sh:/entrypoint.sh odarriba/timemachine-rpi
+```
 
 #### I am still having trouble ...
 
