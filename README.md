@@ -21,7 +21,7 @@ If you want to use this on an ARM-Device (like the Raspberry Pi), you have two o
 To download the docker container and execute it, simply run:
 
 ```
-$ docker run -h timemachine --name timemachine --restart=unless-stopped -d -v /external_volume:/timemachine -it -p 548:548 -p 636:636 odarriba/timemachine
+$ docker run -h timemachine --name timemachine --restart=unless-stopped -d -v /external_volume:/timemachine -it -p 548:548 -p 636:636 --ulimit nofile=65536:65536 odarriba/timemachine
 ```
 
 Replace `external_volume` with a local path where you want to store your data.
