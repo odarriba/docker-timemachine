@@ -27,6 +27,7 @@ RUN apk update && \
       db \
       libevent \
       file \
+      tzdata \
       acl \
       openssl \
       supervisor && \
