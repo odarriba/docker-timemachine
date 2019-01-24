@@ -10,7 +10,7 @@ If you want to use this on an ARM-Device (like the Raspberry Pi), you have two o
     ```
 - Build the image directly on your device:
     ```
-    $ docker build -t timemachine-rpi:latest -f Dockerfile.rpi .
+    $ docker build -t timemachine-rpi:latest -f Dockerfile .
     $ docker run -h timemachine --name timemachine --restart=unless-stopped -d -v /external_volume:/timemachine -it -p 548:548 -p 636:636 timemachine-rpi
     ```
 
