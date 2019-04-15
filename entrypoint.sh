@@ -7,4 +7,4 @@ if [ ! -e /.initialized_user ] && [ ! -z "$AFP_LOGIN" ] && [ ! -z "$AFP_PASSWORD
     touch /.initialized_user
 fi
 
-/usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
+exec /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
