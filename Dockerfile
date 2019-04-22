@@ -76,6 +76,7 @@ RUN mkdir -p /timemachine && \
 RUN touch /var/log/afpd.log
 
 ADD entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 ADD start_netatalk.sh /start_netatalk.sh
 ADD bin/add-account /usr/bin/add-account
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
