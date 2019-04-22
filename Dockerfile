@@ -1,5 +1,5 @@
 FROM alpine:latest
-MAINTAINER Óscar de Arriba <odarriba@gmail.com>
+LABEL maintainer="Óscar de Arriba <odarriba@gmail.com>"
 
 ##################
 ##   BUILDING   ##
