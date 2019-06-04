@@ -19,7 +19,7 @@ mkdir -p ${4}
 
 if [[ $_uid ]] && [[ $_gid ]]; then
   addgroup -g $_gid $1
-  adduser -u $_uid -S -H $1
+  adduser -u $_uid -S -H -G $1 $1
   chown -R $1:$1 ${4}
 else
   adduser -S -H -G root $1
