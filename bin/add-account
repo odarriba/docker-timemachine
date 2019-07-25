@@ -10,7 +10,7 @@ done
 shift $(($OPTIND - 1))
 
 if [[ $# -lt 4 ]]; then
-  echo "Usage: add-account [ -i uid -g gid ] USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]"
+  echo "Usage: add-account [ -i uid -g gid ] USERNAME PASSWORD VOL_NAME VOL_ROOT"
   exit 1
 fi
 
@@ -19,27 +19,30 @@ mkdir -p ${4}
 
 if [[ $_uid ]] && [[ $_gid ]]; then
   addgroup -g $_gid $1
-  adduser -u $_uid -S -H -G $1 $1
+  adduser -u $_uid -S -H -D -G $1 $1
   chown -R $1:$1 ${4}
 else
-  adduser -S -H -G root $1
+  adduser -S -H -D -G root $1
   chown -R $1:root ${4}
 fi
 
-echo $1:$2 | chpasswd
+smbpasswd -L -a -n $1
+smbpasswd -L -e -n $1
+echo -e "$2\n$2" | smbpasswd -L -s $1
 
 # Add config to timemachine
   echo "
 [${3}]
-    path = ${4}
-    time machine = yes
-    valid users = ${1}
-    spotlight = no" >> /etc/afp.conf
+  fruit:aapl = yes
+  fruit:time machine = yes
+  path = ${4}
+  valid users = ${1}
+  browseable = yes
+  writable = yes
+  kernel oplocks = no
+  kernel share modes = no
+  posix locking = no
+  vfs objects = catia fruit streams_xattr" >> /etc/samba/smb.conf
 
-if [[ $# -eq 5 ]]; then
-  echo "
-    vol size limit = ${5}" >> /etc/afp.conf
-fi
-
-pkill -HUP afpd
+pkill -HUP smbd
 exit 0

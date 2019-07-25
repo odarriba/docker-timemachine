@@ -1,88 +1,39 @@
 FROM alpine:latest
-LABEL maintainer="Óscar de Arriba <odarriba@gmail.com>"
+
+ARG BUILD_DATE
+
+LABEL org.label-schema.build-date=$BUILD_DATE \
+  org.label-schema.name="TimeMachine - Samba" \
+  org.label-schema.description="TimeMachine server using Samba protocol." \
+  org.label-schema.vcs-url="https://github.com/odarriba/docker-timemachine" \
+  org.label-schema.schema-version="1.0"
 
 ##################
 ##   BUILDING   ##
 ##################
 
-# Versions to use
-ENV netatalk_version 3.1.12
-
 WORKDIR /
 
-# Prerequisites
 RUN apk update && \
-    apk upgrade && \
-    apk add --no-cache \
-      bash \
-      curl \
-      libldap \
-      libgcrypt \
-      python \
-      dbus \
-      dbus-glib \
-      py-dbus \
-      linux-pam \
-      cracklib \
-      db \
-      libevent \
-      file \
-      tzdata \
-      acl \
-      openssl \
-      supervisor && \
-    apk add --no-cache --virtual .build-deps \
-      build-base \
-      autoconf \
-      automake \
-      libtool \
-      libgcrypt-dev \
-      linux-pam-dev \
-      cracklib-dev \
-      acl-dev \
-      db-dev \
-      dbus-dev \
-      libevent-dev && \
-    ln -s -f /bin/true /usr/bin/chfn && \
-    cd /tmp && \
-    curl -o netatalk-${netatalk_version}.tar.gz -L https://downloads.sourceforge.net/project/netatalk/netatalk/${netatalk_version}/netatalk-${netatalk_version}.tar.gz && \
-    tar xvf netatalk-${netatalk_version}.tar.gz && \
-    cd netatalk-${netatalk_version} && \
-    CFLAGS="-Wno-unused-result -O2" ./configure \
-      --prefix=/usr \
-      --localstatedir=/var/state \
-      --sysconfdir=/etc \
-      --with-dbus-sysconf-dir=/etc/dbus-1/system.d/ \
-      --with-init-style=debian-sysv \
-      --sbindir=/usr/bin \
-      --enable-quota \
-      --with-tdb \
-      --enable-silent-rules \
-      --with-cracklib \
-      --with-cnid-cdb-backend \
-      --enable-pgp-uam \
-      --with-acls && \
-    make && \
-    make install && \
-    cd /tmp && \
-    rm -rf netatalk-${netatalk_version} netatalk-${netatalk_version}.tar.gz && \
-    apk del .build-deps
+  apk upgrade && \
+  apk add --no-cache \
+  bash \
+  samba-server \
+  samba-common-tools \
+  samba-winbind \
+  supervisor
 
 RUN mkdir -p /timemachine && \
-    mkdir -p /var/log/supervisor && \
-    mkdir -p /conf.d/netatalk
+  mkdir -p /etc/samba && \
+  mkdir -p /var/log/supervisor
 
-# Create the log file
-RUN touch /var/log/afpd.log
-
-ADD entrypoint.sh /entrypoint.sh
+ADD bin/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-ADD start_netatalk.sh /start_netatalk.sh
 ADD bin/add-account /usr/bin/add-account
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-ADD afp.conf /etc/afp.conf
+ADD config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD config/smb.conf /etc/samba/smb.conf
 
-EXPOSE 548 636
+EXPOSE 137/UDP 138/UDP 139/TCP 445/TCP
 
 VOLUME ["/timemachine"]
 
