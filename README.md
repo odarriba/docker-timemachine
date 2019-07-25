@@ -3,6 +3,8 @@ A docker container to run a Time Machine server using SMB.
 
 **Note:** This image is now using Samba as the network protocol. There is a AFP container available to use with old OSX versions. Check README in `afp` branch for more information.
 
+**Coming from AFP?** We have an [upgrade guide](UPGRADE.md) to have you covered.
+
 ## Running on ARM / RPi
 If you want to use this on an ARM-Device (like the Raspberry Pi), you have to compile it first:
 
