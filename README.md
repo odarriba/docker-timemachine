@@ -54,18 +54,19 @@ As the image has been started using the `--restart=always` flag, it will start w
 To add a user, run:
 
 ```
-$ docker exec timemachine add-account USERNAME PASSWORD VOL_NAME VOL_ROOT
+$ docker exec timemachine add-account USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]
 ```
 
 Or, if you want to add a user with a specific UID/GID, use the following format
 
 ```
-$ docker exec timemachine add-account -i 1000 -g 1000 USERNAME PASSWORD VOL_NAME VOL_ROOT
+$ docker exec timemachine add-account -i 1000 -g 1000 USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]
 ```
 
 But take care that:
 * `VOL_NAME` will be the name of the volume shown on your OSX as the network drive
 * `VOL_ROOT` should be an absolute path, preferably a sub-path of `/timemachine` (e.g., `/timemachine/backup`), so it will be stored in the according sub-path of your external volume.
+* `VOL_SIZE_MB` is an optional parameter. It indicates the max volume size for that user.
 
 
 ### Step 3 - Enable Auto Discovery
@@ -122,6 +123,7 @@ There are these environment variables:
 * **SMB_LOGIN**: User name
 * **SMB_PASSWORD**: User password
 * **SMB_NAME**: Name of the volume
+* **SMB_SIZE_LIMIT**: Size in MB of the volume (optional)
 * **PUID**: For UID
 * **PGID**: For GID
 
@@ -151,8 +153,8 @@ Alternativey, you can script the account creation and upload a custom entrypoint
 set -e
 
 # Repeat for all your accounts
-add-account USERNAME PASSWORD VOL_NAME VOL_ROOT
-add-account USERNAME PASSWORD VOL_NAME VOL_ROOT
+add-account USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]
+add-account USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]
 /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf
 ```
 
