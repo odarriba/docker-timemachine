@@ -10,7 +10,7 @@ done
 shift $(($OPTIND - 1))
 
 if [[ $# -lt 4 ]]; then
-  echo "Usage: add-account [ -i uid -g gid ] USERNAME PASSWORD VOL_NAME VOL_ROOT"
+  echo "Usage: add-account [ -i uid -g gid ] USERNAME PASSWORD VOL_NAME VOL_ROOT [VOL_SIZE_MB]"
   exit 1
 fi
 
@@ -43,6 +43,11 @@ echo -e "$2\n$2" | smbpasswd -L -s $1
   kernel share modes = no
   posix locking = no
   vfs objects = catia fruit streams_xattr" >> /etc/samba/smb.conf
+
+if [[ $# -eq 5 ]]; then
+  TM_SIZE=$((${5} * 1000000))
+  sed "s#REPLACE_TM_SIZE#${TM_SIZE}#" /com.apple.TimeMachine.quota.plist > ${4}/.com.apple.TimeMachine.quota.plist
+fi
 
 pkill -HUP smbd
 exit 0

@@ -32,6 +32,7 @@ RUN chmod +x /entrypoint.sh
 ADD bin/add-account /usr/bin/add-account
 ADD config/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD config/smb.conf /etc/samba/smb.conf
+ADD config/com.apple.TimeMachine.quota.plist /com.apple.TimeMachine.quota.plist
 
 EXPOSE 137/UDP 138/UDP 139/TCP 445/TCP
 
