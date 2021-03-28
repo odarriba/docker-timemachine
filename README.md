@@ -79,6 +79,7 @@ Avahi isn't built into this Docker image because, due to Docker's networking lim
 * Install `avahi-daemon`: run `sudo apt-get install avahi-daemon avahi-utils`
 * Copy the file from `avahi/nsswitch.conf` to `/etc/nsswitch.conf`
 * Copy the service description file from `avahi/smbd.service` to `/etc/avahi/services/smbd.service`
+* Replace VOL_NAME with same name as by adding user `sudo nano /etc/avahi/services/smbd.service`.
 * Restart Avahi's daemon: `sudo /etc/init.d/avahi-daemon restart`
 
 
